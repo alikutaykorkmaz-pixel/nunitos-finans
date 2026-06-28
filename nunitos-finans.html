@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nunitos Agency — Finans</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#0b0b0b;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:56px;background:#fff;border-bottom:1px solid #e5e5e3;position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;border-radius:8px;background:#2a78d6;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px}
+.brand-name{font-size:15px;font-weight:600;color:#0b0b0b}
+.brand-sub{font-size:11px;color:#898781}
+.top-actions{display:flex;gap:8px;align-items:center}
+.nav-tabs{display:flex;background:#fff;border-bottom:1px solid #e5e5e3;padding:0 1.5rem;gap:2px;position:sticky;top:56px;z-index:40}
+.tab{padding:12px 16px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#52514e;border-bottom:2px solid transparent;display:flex;align-items:center;gap:6px;transition:color .15s;white-space:nowrap}
+.tab.active{color:#2a78d6;border-bottom-color:#2a78d6;font-weight:500}
+.tab:hover:not(.active){color:#0b0b0b;background:#f5f5f3}
+.content{padding:1.5rem;max-width:1200px;margin:0 auto}
+.section{display:none}
+.section.active{display:block}
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap;background:#fff;padding:10px 14px;border-radius:10px;border:1px solid #e5e5e3}
+.filter-bar select,.filter-bar input{font-size:12px;padding:6px 10px;border:1px solid #d5d5d3;border-radius:6px;background:#f5f5f3;color:#0b0b0b;outline:none}
+.filter-bar select:focus,.filter-bar input:focus{border-color:#2a78d6}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
+.kpi{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #e5e5e3}
+.kpi-label{font-size:11px;color:#898781;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.kpi-val{font-size:20px;font-weight:600;color:#0b0b0b;line-height:1.2}
+.card{background:#fff;border:1px solid #e5e5e3;border-radius:12px;margin-bottom:1rem;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e5e5e3;background:#fafafa}
+.card-title{font-size:13px;font-weight:600;color:#0b0b0b;display:flex;align-items:center;gap:7px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1px solid #d5d5d3;border-radius:7px;font-size:12px;cursor:pointer;background:#fff;color:#0b0b0b;transition:all .12s;white-space:nowrap}
+.btn:hover{background:#f5f5f3;border-color:#aaa}
+.btn:active{transform:scale(0.98)}
+.btn-blue{background:#2a78d6;border-color:#2a78d6;color:#fff}
+.btn-blue:hover{background:#185fa5;border-color:#185fa5}
+.btn-green{background:#1baf7a;border-color:#1baf7a;color:#fff}
+.btn-green:hover{background:#0f6e56}
+.btn-red{background:#e34948;border-color:#e34948;color:#fff}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;color:#898781;font-weight:500;border-bottom:1px solid #e5e5e3;background:#fafafa;white-space:nowrap}
+td{padding:10px 14px;color:#0b0b0b;border-bottom:1px solid #f0f0ee;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;gap:3px}
+.bdg-green{background:#e1f5ee;color:#085041}
+.bdg-amber{background:#faeeda;color:#633806}
+.bdg-red{background:#fcebeb;color:#791f1f}
+.bdg-blue{background:#e6f1fb;color:#0c447c}
+.bdg-violet{background:#eeedfe;color:#3c3489}
+.bdg-teal{background:#e1f5ee;color:#085041}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #e5e5e3;position:sticky;top:0;background:#fff;z-index:1}
+.modal-hdr h3{font-size:14px;font-weight:600;color:#0b0b0b;display:flex;align-items:center;gap:7px}
+.modal-body{padding:18px}
+.fg{margin-bottom:13px}
+.fg label{font-size:11px;color:#52514e;display:block;margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;border:1px solid #d5d5d3;border-radius:7px;font-size:13px;background:#fff;color:#0b0b0b;outline:none;transition:border .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#2a78d6}
+.fg textarea{resize:vertical;min-height:64px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-foot{padding:14px 18px;border-top:1px solid #e5e5e3;display:flex;justify-content:flex-end;gap:8px;background:#fafafa}
+
+.ocr-zone{border:2px dashed #d5d5d3;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa}
+.ocr-zone:hover{border-color:#2a78d6;background:#f0f6ff}
+.ocr-zone i{font-size:36px;color:#898781;display:block;margin-bottom:10px}
+.ocr-zone p{font-size:13px;color:#52514e}
+.ocr-zone .hint{font-size:11px;color:#898781;margin-top:4px}
+.ocr-preview img{width:100%;display:block;max-height:220px;object-fit:contain;background:#f5f5f3}
+.warn-box{background:#fffbf0;border:1px solid #f0c040;border-radius:8px;padding:11px 13px;margin:10px 0;font-size:12px;color:#633806;display:flex;align-items:flex-start;gap:7px}
+.info-box{background:#f0f6ff;border:1px solid #93c5fd;border-radius:8px;padding:11px 13px;font-size:12px;color:#0c447c;display:flex;align-items:center;gap:7px}
+.success-box{background:#f0faf5;border:1px solid #6ee7b7;border-radius:8px;padding:11px 13px;font-size:12px;color:#085041;display:flex;align-items:center;gap:7px}
+
+.progress-bg{background:#f0f0ee;border-radius:4px;height:8px;overflow:hidden;margin-top:7px}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s}
+.budget-item{padding:12px 0;border-bottom:1px solid #f0f0ee}
+.budget-item:last-child{border-bottom:none}
+
+.chart-wrap{position:relative;width:100%;height:220px;padding:16px 18px 18px}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#0b0b0b;color:#fff;border-radius:9px;padding:11px 16px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.api-bar{background:#fffbf0;border-bottom:1px solid #f0c040;padding:8px 1.5rem;display:flex;align-items:center;gap:10px;font-size:12px;color:#633806}
+.api-bar input{flex:1;max-width:320px;padding:6px 10px;border:1px solid #f0c040;border-radius:6px;font-size:12px;background:#fff}
+.api-bar .api-status{font-size:11px;margin-left:4px}
+.api-status.ok{color:#085041}
+.api-status.err{color:#791f1f}
+
+.empty{text-align:center;padding:2.5rem;color:#898781;font-size:13px}
+
+@media(max-width:600px){
+  .frow{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .top-actions .btn span{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg"></span></div>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">N</div>
+    <div>
+      <div class="brand-name">Nunitos Agency</div>
+      <div class="brand-sub">Finans Yönetimi</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button class="btn" onclick="exportPDF()"><i class="ti ti-file-download"></i> <span>PDF dışa aktar</span></button>
+    <button class="btn btn-blue" onclick="document.getElementById('api-panel').style.display=document.getElementById('api-panel').style.display==='none'?'flex':'none'"><i class="ti ti-key"></i> <span>API Anahtarı</span></button>
+  </div>
+</div>
+
+<div class="api-bar" id="api-panel" style="display:none">
+  <i class="ti ti-key"></i>
+  <span>Anthropic API Anahtarı (OCR için):</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-..." oninput="saveApiKey(this.value)"/>
+  <span class="api-status" id="api-status"></span>
+  <button class="btn" onclick="testApiKey()"><i class="ti ti-plug"></i> Test et</button>
+  <button class="btn" onclick="document.getElementById('api-panel').style.display='none'">Kapat</button>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab active" onclick="gotoTab('ozet')"><i class="ti ti-layout-dashboard"></i> Özet</button>
+  <button class="tab" onclick="gotoTab('gelir')"><i class="ti ti-trending-up"></i> Gelir</button>
+  <button class="tab" onclick="gotoTab('gider')"><i class="ti ti-trending-down"></i> Gider</button>
+  <button class="tab" onclick="gotoTab('musteri')"><i class="ti ti-users"></i> Müşteriler</button>
+  <button class="tab" onclick="gotoTab('butce')"><i class="ti ti-chart-pie"></i> Bütçe</button>
+</div>
+
+<div class="content">
+
+<!-- ÖZET -->
+<div class="section active" id="tab-ozet">
+  <div class="kpi-row" id="ozet-kpis"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+    <div class="card">
+      <div class="card-head"><span class="card-title"><i class="ti ti-trending-up"></i> Son gelirler</span></div>
+      <div id="ozet-gelir-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-title"><i class="ti ti-trending-down"></i> Son giderler</span></div>
+      <div id="ozet-gider-list"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title"><i class="ti ti-chart-bar"></i> Aylık gelir / gider (TL)</span></div>
+    <div class="chart-wrap"><canvas id="ozet-chart" role="img" aria-label="Aylık gelir gider karşılaştırması"></canvas></div>
+    <div style="display:flex;gap:16px;padding:0 18px 14px;font-size:12px;color:#52514e">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:#1baf7a;display:inline-block"></span>Gelir</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:3px;background:#e34948;display:inline-block"></span>Gider</span>
+    </div>
+  </div>
+</div>
+
+<!-- GELİR -->
+<div class="section" id="tab-gelir">
+  <div class="filter-bar">
+    <i class="ti ti-filter" style="color:#898781"></i>
+    <select id="f-gelir-ay" onchange="renderGelir()"><option value="">Tüm aylar</option></select>
+    <select id="f-gelir-cur" onchange="renderGelir()"><option value="">Tüm para birimleri</option><option>TL</option><option>USD</option><option>EUR</option></select>
+    <select id="f-gelir-durum" onchange="renderGelir()"><option value="">Tüm durumlar</option><option>Bekliyor</option><option>Ödendi</option><option>Gecikmiş</option></select>
+    <div style="flex:1"></div>
+    <button class="btn" onclick="openOCR('gelir')"><i class="ti ti-scan"></i> OCR ile yükle</button>
+    <button class="btn btn-blue" onclick="openModal('m-gelir')"><i class="ti ti-plus"></i> Yeni fatura</button>
+  </div>
+  <div class="kpi-row" id="gelir-kpis"></div>
+  <div class="card">
+    <div class="card-head"><span class="card-title"><i class="ti ti-file-invoice"></i> Nunitos'tan kesilen faturalar (Gelir)</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Müşteri</th><th>Fatura No</th><th>Tutar</th><th>Para Birimi</th><th>KDV</th><th>Toplam</th><th>Tarih</th><th>Durum</th><th></th></tr></thead>
+        <tbody id="gelir-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- GİDER -->
+<div class="section" id="tab-gider">
+  <div class="filter-bar">
+    <i class="ti ti-filter" style="color:#898781"></i>
+    <select id="f-gider-ay" onchange="renderGider()"><option value="">Tüm aylar</option></select>
+    <select id="f-gider-cur" onchange="renderGider()"><option value="">Tüm para birimleri</option><option>TL</option><option>USD</option><option>EUR</option></select>
+    <select id="f-gider-kat" onchange="renderGider()"><option value="">Tüm kategoriler</option><option>Kira</option><option>Maaşlar</option><option>Yazılım</option><option>Pazarlama</option><option>Ulaşım</option><option>Tedarikçi</option><option>Diğer</option></select>
+    <div style="flex:1"></div>
+    <button class="btn" onclick="openOCR('gider')"><i class="ti ti-scan"></i> OCR ile yükle</button>
+    <button class="btn btn-blue" onclick="openModal('m-gider')"><i class="ti ti-plus"></i> Yeni gider</button>
+  </div>
+  <div class="kpi-row" id="gider-kpis"></div>
+  <div class="card">
+    <div class="card-head"><span class="card-title"><i class="ti ti-receipt"></i> Nunitos'a kesilen faturalar (Gider)</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tedarikçi</th><th>Fatura No</th><th>Tutar</th><th>Para Birimi</th><th>KDV</th><th>Toplam</th><th>Tarih</th><th>Kategori</th><th></th></tr></thead>
+        <tbody id="gider-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MÜŞTERİLER -->
+<div class="section" id="tab-musteri">
+  <div class="filter-bar">
+    <div style="flex:1"></div>
+    <button class="btn btn-blue" onclick="openModal('m-musteri')"><i class="ti ti-plus"></i> Müşteri ekle</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title"><i class="ti ti-users"></i> Müşteri borç / alacak durumu</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Müşteri</th><th>Alacak (TL)</th><th>Borç (TL)</th><th>Net Durum</th><th>Döviz Notu</th><th></th></tr></thead>
+        <tbody id="musteri-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- BÜTÇE -->
+<div class="section" id="tab-butce">
+  <div class="filter-bar">
+    <div style="flex:1"></div>
+    <button class="btn btn-blue" onclick="openModal('m-butce')"><i class="ti ti-plus"></i> Bütçe kalemi ekle</button>
+  </div>
+  <div class="card">
+    <div class="card-head"><span class="card-title"><i class="ti ti-chart-pie"></i> Bütçe planı</span></div>
+    <div style="padding:14px 18px" id="butce-list"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- MODAL: GELİR -->
+<div class="overlay" id="m-gelir">
+<div class="modal">
+  <div class="modal-hdr"><h3><i class="ti ti-file-invoice"></i> Yeni gelir faturası</h3><button class="btn" onclick="closeModal('m-gelir')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div class="frow"><div class="fg"><label>Müşteri adı *</label><input id="g-musteri" placeholder="ABC Şirketi A.Ş."/></div><div class="fg"><label>Fatura no</label><input id="g-no" placeholder="FTR-2025-001"/></div></div>
+    <div class="frow">
+      <div class="fg"><label>Tutar *</label><input id="g-tutar" type="number" min="0" placeholder="0.00"/></div>
+      <div class="fg"><label>Para birimi</label><select id="g-cur"><option>TL</option><option>USD</option><option>EUR</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>KDV oranı</label><select id="g-kdv"><option value="0">%0</option><option value="10">%10</option><option value="20" selected>%20</option></select></div>
+      <div class="fg"><label>Tarih</label><input id="g-tarih" type="date"/></div>
+    </div>
+    <div class="fg"><label>Durum</label><select id="g-durum"><option>Bekliyor</option><option>Ödendi</option><option>Gecikmiş</option></select></div>
+    <div class="fg"><label>Notlar</label><textarea id="g-not" placeholder="İsteğe bağlı..."></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="closeModal('m-gelir')">İptal</button><button class="btn btn-blue" onclick="addGelir()"><i class="ti ti-device-floppy"></i> Kaydet</button></div>
+</div>
+</div>
+
+<!-- MODAL: GİDER -->
+<div class="overlay" id="m-gider">
+<div class="modal">
+  <div class="modal-hdr"><h3><i class="ti ti-receipt"></i> Yeni gider faturası</h3><button class="btn" onclick="closeModal('m-gider')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div class="frow"><div class="fg"><label>Tedarikçi / Açıklama *</label><input id="gi-tedarik" placeholder="XYZ Tedarikçi Ltd."/></div><div class="fg"><label>Fatura no</label><input id="gi-no" placeholder="GDR-2025-001"/></div></div>
+    <div class="frow">
+      <div class="fg"><label>Tutar *</label><input id="gi-tutar" type="number" min="0" placeholder="0.00"/></div>
+      <div class="fg"><label>Para birimi</label><select id="gi-cur"><option>TL</option><option>USD</option><option>EUR</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>KDV oranı</label><select id="gi-kdv"><option value="0">%0</option><option value="10">%10</option><option value="20" selected>%20</option></select></div>
+      <div class="fg"><label>Tarih</label><input id="gi-tarih" type="date"/></div>
+    </div>
+    <div class="fg"><label>Kategori</label><select id="gi-kat"><option>Kira</option><option>Maaşlar</option><option>Yazılım</option><option>Pazarlama</option><option>Ulaşım</option><option>Tedarikçi</option><option>Diğer</option></select></div>
+    <div class="fg"><label>Notlar</label><textarea id="gi-not" placeholder="İsteğe bağlı..."></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="closeModal('m-gider')">İptal</button><button class="btn btn-blue" onclick="addGider()"><i class="ti ti-device-floppy"></i> Kaydet</button></div>
+</div>
+</div>
+
+<!-- MODAL: MÜŞTERİ -->
+<div class="overlay" id="m-musteri">
+<div class="modal">
+  <div class="modal-hdr"><h3><i class="ti ti-user"></i> Müşteri ekle</h3><button class="btn" onclick="closeModal('m-musteri')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div class="fg"><label>Müşteri adı *</label><input id="m-ad" placeholder="ABC Ltd. Şti."/></div>
+    <div class="frow">
+      <div class="fg"><label>Alacak (TL)</label><input id="m-alacak" type="number" placeholder="0"/></div>
+      <div class="fg"><label>Borç (TL)</label><input id="m-borc" type="number" placeholder="0"/></div>
+    </div>
+    <div class="fg"><label>Döviz notu</label><input id="m-doviz" placeholder="Örn: 5.000 USD alacak var"/></div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="closeModal('m-musteri')">İptal</button><button class="btn btn-blue" onclick="addMusteri()"><i class="ti ti-device-floppy"></i> Kaydet</button></div>
+</div>
+</div>
+
+<!-- MODAL: BÜTÇE -->
+<div class="overlay" id="m-butce">
+<div class="modal">
+  <div class="modal-hdr"><h3><i class="ti ti-chart-pie"></i> Bütçe kalemi ekle</h3><button class="btn" onclick="closeModal('m-butce')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div class="fg"><label>Kategori *</label><input id="b-kat" placeholder="Pazarlama"/></div>
+    <div class="frow">
+      <div class="fg"><label>Hedef tutar (TL)</label><input id="b-hedef" type="number" placeholder="0"/></div>
+      <div class="fg"><label>Harcanan (TL)</label><input id="b-harc" type="number" placeholder="0"/></div>
+    </div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="closeModal('m-butce')">İptal</button><button class="btn btn-blue" onclick="addButce()"><i class="ti ti-device-floppy"></i> Kaydet</button></div>
+</div>
+</div>
+
+<!-- MODAL: OCR -->
+<div class="overlay" id="m-ocr">
+<div class="modal" style="max-width:500px">
+  <div class="modal-hdr"><h3><i class="ti ti-scan"></i> Fatura OCR — AI ile otomatik okuma</h3><button class="btn" onclick="closeModal('m-ocr')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-body">
+    <div id="ocr-s1">
+      <div class="ocr-zone" onclick="document.getElementById('ocr-file').click()">
+        <i class="ti ti-cloud-upload"></i>
+        <p>Fatura görselini seçmek için tıkla</p>
+        <p class="hint">JPG, PNG veya PDF — Max 5MB</p>
+      </div>
+      <input type="file" id="ocr-file" accept="image/*,.pdf" style="display:none" onchange="handleOCR(event)"/>
+      <div class="warn-box" style="margin-top:12px">
+        <i class="ti ti-alert-triangle"></i>
+        <span>API anahtarı girmeden OCR çalışmaz. Sağ üstteki <strong>API Anahtarı</strong> butonundan anahtarını ekle.</span>
+      </div>
+    </div>
+    <div id="ocr-s2" style="display:none">
+      <div class="info-box"><i class="ti ti-loader"></i><span id="ocr-status">Fatura okunuyor, lütfen bekle...</span></div>
+      <div id="ocr-img-wrap" style="margin-top:12px;border-radius:8px;overflow:hidden;border:1px solid #e5e5e3;display:none" class="ocr-preview"></div>
+    </div>
+    <div id="ocr-s3" style="display:none">
+      <div class="warn-box"><i class="ti ti-alert-triangle"></i><strong>AI tarafından okunan bilgileri kontrol et!</strong> Yanlış varsa düzelt, sonra onayla.</div>
+      <div class="fg"><label>Firma / Müşteri adı</label><input id="ocr-firma"/></div>
+      <div class="fg"><label>Fatura no</label><input id="ocr-no"/></div>
+      <div class="frow">
+        <div class="fg"><label>Tutar</label><input id="ocr-tutar" type="number"/></div>
+        <div class="fg"><label>Para birimi</label><select id="ocr-cur"><option>TL</option><option>USD</option><option>EUR</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>KDV %</label><select id="ocr-kdv"><option value="0">%0</option><option value="10">%10</option><option value="20">%20</option></select></div>
+        <div class="fg"><label>Tarih</label><input id="ocr-tarih" type="date"/></div>
+      </div>
+      <div class="fg"><label>Bu fatura türü</label>
+        <select id="ocr-tur">
+          <option value="gelir">Gelir — Nunitos'tan müşteriye kesilen</option>
+          <option value="gider">Gider — Nunitos'a tedarikçiden gelen</option>
+        </select>
+      </div>
+      <div class="success-box"><i class="ti ti-shield-check"></i>Bilgileri onaylamadan kayıt yapılmaz. Lütfen her alanı kontrol et.</div>
+    </div>
+    <div id="ocr-s4" style="display:none">
+      <div style="text-align:center;padding:2rem">
+        <i class="ti ti-circle-check" style="font-size:48px;color:#1baf7a;display:block;margin-bottom:12px"></i>
+        <p style="font-size:15px;font-weight:600;color:#085041">Fatura başarıyla kaydedildi!</p>
+        <p style="font-size:12px;color:#52514e;margin-top:6px" id="ocr-success-msg"></p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn" onclick="closeModal('m-ocr')" id="ocr-cancel-btn">İptal</button>
+    <button class="btn btn-green" id="ocr-confirm-btn" style="display:none" onclick="confirmOCR()"><i class="ti ti-check"></i> Onayla ve kaydet</button>
+    <button class="btn btn-blue" id="ocr-close-btn" style="display:none" onclick="closeModal('m-ocr')">Kapat</button>
+  </div>
+</div>
+</div>
+
+<script>
+const MONTHS=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+const MONTHS_FULL=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const CUR_SYM={TL:'₺',USD:'$',EUR:'€'};
+let gelirler=JSON.parse(localStorage.getItem('nn3_gelir')||'[]');
+let giderler=JSON.parse(localStorage.getItem('nn3_gider')||'[]');
+let musteriler=JSON.parse(localStorage.getItem('nn3_musteri')||'[]');
+let butceler=JSON.parse(localStorage.getItem('nn3_butce')||'[]');
+let ozetChart=null;
+let ocrType='gelir';
+
+function save(){
+  localStorage.setItem('nn3_gelir',JSON.stringify(gelirler));
+  localStorage.setItem('nn3_gider',JSON.stringify(giderler));
+  localStorage.setItem('nn3_musteri',JSON.stringify(musteriler));
+  localStorage.setItem('nn3_butce',JSON.stringify(butceler));
+}
+function fmt(n,cur){return CUR_SYM[cur||'TL']+Math.round(Number(n)).toLocaleString('tr-TR');}
+function toplam(tutar,kdv){return Number(tutar)*(1+Number(kdv)/100);}
+function showToast(msg,ok=true){
+  const t=document.getElementById('toast');
+  t.innerHTML=`<i class="ti ti-${ok?'check':'alert-triangle'}"></i><span>${msg}</span>`;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function saveApiKey(v){localStorage.setItem('nn3_apikey',v);document.getElementById('api-status').textContent='';}
+function getApiKey(){
+  const stored=localStorage.getItem('nn3_apikey')||'';
+  const input=document.getElementById('api-key-input');
+  if(input&&!input.value&&stored)input.value=stored;
+  return stored||input?.value||'';
+}
+async function testApiKey(){
+  const key=getApiKey();
+  if(!key){document.getElementById('api-status').textContent='⚠ Anahtar girilmedi';document.getElementById('api-status').className='api-status err';return;}
+  document.getElementById('api-status').textContent='Test ediliyor...';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:10,messages:[{role:'user',content:'hi'}]})});
+    if(r.ok){document.getElementById('api-status').textContent='✓ Bağlantı başarılı';document.getElementById('api-status').className='api-status ok';}
+    else{document.getElementById('api-status').textContent='✗ Geçersiz anahtar';document.getElementById('api-status').className='api-status err';}
+  }catch(e){document.getElementById('api-status').textContent='✗ Bağlantı hatası';document.getElementById('api-status').className='api-status err';}
+}
+
+function gotoTab(id){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const tabs=['ozet','gelir','gider','musteri','butce'];
+  document.querySelectorAll('.tab')[tabs.indexOf(id)].classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='ozet')renderOzet();
+  if(id==='gelir'){buildAyFilter('f-gelir-ay',gelirler);renderGelir();}
+  if(id==='gider'){buildAyFilter('f-gider-ay',giderler);renderGider();}
+  if(id==='musteri')renderMusteri();
+  if(id==='butce')renderButce();
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  if(id==='m-ocr')resetOCR();
+}
+function openOCR(type){ocrType=type;document.getElementById('ocr-tur').value=type;openModal('m-ocr');}
+
+function buildAyFilter(selId,arr){
+  const sel=document.getElementById(selId);const cur=sel.value;
+  const months=new Set(arr.map(r=>r.tarih?r.tarih.slice(0,7):'').filter(Boolean));
+  sel.innerHTML='<option value="">Tüm aylar</option>';
+  [...months].sort().reverse().forEach(m=>{
+    const d=new Date(m+'-01');
+    sel.innerHTML+=`<option value="${m}"${cur===m?' selected':''}>${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}</option>`;
+  });
+}
+
+function renderOzet(){
+  const tG=gelirler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  const tGi=giderler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  const kar=tG-tGi;
+  const usdG=gelirler.filter(g=>g.cur==='USD').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  const eurG=gelirler.filter(g=>g.cur==='EUR').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  document.getElementById('ozet-kpis').innerHTML=`
+    <div class="kpi"><div class="kpi-label">Toplam gelir (TL)</div><div class="kpi-val" style="color:#1baf7a">${fmt(tG)}</div></div>
+    <div class="kpi"><div class="kpi-label">Toplam gider (TL)</div><div class="kpi-val" style="color:#e34948">${fmt(tGi)}</div></div>
+    <div class="kpi"><div class="kpi-label">Net kâr (TL)</div><div class="kpi-val" style="color:${kar>=0?'#1baf7a':'#e34948'}">${kar>=0?'+':''}${fmt(kar)}</div></div>
+    <div class="kpi"><div class="kpi-label">USD gelir</div><div class="kpi-val" style="color:#4a3aa7">$${Math.round(usdG).toLocaleString('tr-TR')}</div></div>
+    <div class="kpi"><div class="kpi-label">EUR gelir</div><div class="kpi-val" style="color:#0f6e56">€${Math.round(eurG).toLocaleString('tr-TR')}</div></div>
+  `;
+  const gl=gelirler.slice(-5).reverse();
+  const gd=giderler.slice(-5).reverse();
+  document.getElementById('ozet-gelir-list').innerHTML=gl.length?gl.map(g=>`
+    <div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px">
+      <span style="color:#0b0b0b">${g.musteri||'-'}</span>
+      <span style="color:#1baf7a;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span>
+    </div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
+  document.getElementById('ozet-gider-list').innerHTML=gd.length?gd.map(g=>`
+    <div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px">
+      <span style="color:#0b0b0b">${g.tedarik||'-'}</span>
+      <span style="color:#e34948;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span>
+    </div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
+  renderOzetChart();
+}
+
+function renderOzetChart(){
+  const gelirD=Array(12).fill(0);const giderD=Array(12).fill(0);
+  const yr=new Date().getFullYear();
+  gelirler.forEach(g=>{if(g.tarih&&g.tarih.slice(0,4)==yr&&g.cur==='TL'){gelirD[new Date(g.tarih).getMonth()]+=toplam(g.tutar,g.kdv);}});
+  giderler.forEach(g=>{if(g.tarih&&g.tarih.slice(0,4)==yr&&g.cur==='TL'){giderD[new Date(g.tarih).getMonth()]+=toplam(g.tutar,g.kdv);}});
+  if(ozetChart)ozetChart.destroy();
+  ozetChart=new Chart(document.getElementById('ozet-chart').getContext('2d'),{
+    type:'bar',
+    data:{labels:MONTHS,datasets:[
+      {label:'Gelir',data:gelirD.map(v=>Math.round(v)),backgroundColor:'#1baf7a',borderRadius:4,borderSkipped:false},
+      {label:'Gider',data:giderD.map(v=>Math.round(v)),backgroundColor:'#e34948',borderRadius:4,borderSkipped:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+      x:{ticks:{color:'#898781',font:{size:11}},grid:{display:false}},
+      y:{ticks:{color:'#898781',font:{size:11},callback:v=>'₺'+Math.round(v/1000)+'K'},grid:{color:'rgba(0,0,0,0.05)'}}
+    }}
+  });
+}
+
+function filterArr(arr,ayId,curId){
+  let out=[...arr];
+  const ay=document.getElementById(ayId)?.value;
+  const cur=document.getElementById(curId)?.value;
+  if(ay)out=out.filter(r=>r.tarih&&r.tarih.startsWith(ay));
+  if(cur)out=out.filter(r=>r.cur===cur);
+  return out;
+}
+
+function renderGelir(){
+  let arr=filterArr(gelirler,'f-gelir-ay','f-gelir-cur');
+  const dur=document.getElementById('f-gelir-durum')?.value;
+  if(dur)arr=arr.filter(r=>r.durum===dur);
+  const total=arr.reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  const odenen=arr.filter(g=>g.durum==='Ödendi').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  document.getElementById('gelir-kpis').innerHTML=`
+    <div class="kpi"><div class="kpi-label">Toplam (TL)</div><div class="kpi-val">${fmt(total)}</div></div>
+    <div class="kpi"><div class="kpi-label">Ödendi</div><div class="kpi-val" style="color:#1baf7a">${fmt(odenen)}</div></div>
+    <div class="kpi"><div class="kpi-label">Bekleyen</div><div class="kpi-val" style="color:#eda100">${fmt(total-odenen)}</div></div>
+    <div class="kpi"><div class="kpi-label">Fatura sayısı</div><div class="kpi-val">${arr.length}</div></div>
+  `;
+  const tbody=document.getElementById('gelir-tbody');
+  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Fatura bulunamadı. "Yeni fatura" veya "OCR ile yükle" kullan.</div></td></tr>`;return;}
+  tbody.innerHTML=arr.map(g=>{
+    const top=toplam(g.tutar,g.kdv);
+    const dc=g.durum==='Ödendi'?'bdg-green':g.durum==='Bekliyor'?'bdg-amber':'bdg-red';
+    const cc=g.cur==='TL'?'bdg-blue':g.cur==='USD'?'bdg-violet':'bdg-teal';
+    return`<tr>
+      <td style="font-weight:500">${g.musteri||'-'}</td>
+      <td style="color:#52514e">${g.no||'-'}</td>
+      <td>${fmt(g.tutar,g.cur)}</td>
+      <td><span class="bdg ${cc}">${g.cur}</span></td>
+      <td>${g.kdv}%</td>
+      <td style="font-weight:600">${fmt(top,g.cur)}</td>
+      <td>${g.tarih||'-'}</td>
+      <td><span class="bdg ${dc}">${g.durum}</span></td>
+      <td><button class="btn btn-red" onclick="delGelir(${gelirler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+function addGelir(data){
+  const d=data||{musteri:document.getElementById('g-musteri').value.trim(),no:document.getElementById('g-no').value.trim(),tutar:document.getElementById('g-tutar').value,cur:document.getElementById('g-cur').value,kdv:document.getElementById('g-kdv').value,tarih:document.getElementById('g-tarih').value,durum:document.getElementById('g-durum').value,not:document.getElementById('g-not').value};
+  if(!d.musteri||!d.tutar){showToast('Müşteri adı ve tutar zorunlu!',false);return;}
+  gelirler.push(d);save();buildAyFilter('f-gelir-ay',gelirler);renderGelir();
+  if(!data){closeModal('m-gelir');['g-musteri','g-no','g-tutar','g-tarih','g-not'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
+  showToast('Gelir faturası kaydedildi');
+}
+function delGelir(i){if(confirm('Bu faturayı silmek istediğine emin misin?')){gelirler.splice(i,1);save();buildAyFilter('f-gelir-ay',gelirler);renderGelir();}}
+
+function renderGider(){
+  let arr=filterArr(giderler,'f-gider-ay','f-gider-cur');
+  const kat=document.getElementById('f-gider-kat')?.value;
+  if(kat)arr=arr.filter(r=>r.kategori===kat);
+  const total=arr.reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  document.getElementById('gider-kpis').innerHTML=`
+    <div class="kpi"><div class="kpi-label">Toplam gider (TL)</div><div class="kpi-val" style="color:#e34948">${fmt(total)}</div></div>
+    <div class="kpi"><div class="kpi-label">Gider sayısı</div><div class="kpi-val">${arr.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Ortalama gider</div><div class="kpi-val">${arr.length?fmt(total/arr.length):fmt(0)}</div></div>
+  `;
+  const tbody=document.getElementById('gider-tbody');
+  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Gider bulunamadı. "Yeni gider" veya "OCR ile yükle" kullan.</div></td></tr>`;return;}
+  tbody.innerHTML=arr.map(g=>{
+    const top=toplam(g.tutar,g.kdv);
+    const cc=g.cur==='TL'?'bdg-blue':g.cur==='USD'?'bdg-violet':'bdg-teal';
+    return`<tr>
+      <td style="font-weight:500">${g.tedarik||'-'}</td>
+      <td style="color:#52514e">${g.no||'-'}</td>
+      <td>${fmt(g.tutar,g.cur)}</td>
+      <td><span class="bdg ${cc}">${g.cur}</span></td>
+      <td>${g.kdv}%</td>
+      <td style="font-weight:600">${fmt(top,g.cur)}</td>
+      <td>${g.tarih||'-'}</td>
+      <td><span class="bdg bdg-amber">${g.kategori}</span></td>
+      <td><button class="btn btn-red" onclick="delGider(${giderler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+
+function addGider(data){
+  const d=data||{tedarik:document.getElementById('gi-tedarik').value.trim(),no:document.getElementById('gi-no').value.trim(),tutar:document.getElementById('gi-tutar').value,cur:document.getElementById('gi-cur').value,kdv:document.getElementById('gi-kdv').value,tarih:document.getElementById('gi-tarih').value,kategori:document.getElementById('gi-kat').value,not:document.getElementById('gi-not').value};
+  if(!d.tedarik||!d.tutar){showToast('Tedarikçi adı ve tutar zorunlu!',false);return;}
+  giderler.push(d);save();buildAyFilter('f-gider-ay',giderler);renderGider();
+  if(!data){closeModal('m-gider');['gi-tedarik','gi-no','gi-tutar','gi-tarih','gi-not'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
+  showToast('Gider faturası kaydedildi');
+}
+function delGider(i){if(confirm('Bu faturayı silmek istediğine emin misin?')){giderler.splice(i,1);save();buildAyFilter('f-gider-ay',giderler);renderGider();}}
+
+function renderMusteri(){
+  const tbody=document.getElementById('musteri-tbody');
+  if(!musteriler.length){tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Henüz müşteri eklenmedi.</div></td></tr>`;return;}
+  tbody.innerHTML=musteriler.map((m,i)=>{
+    const net=Number(m.alacak)-Number(m.borc);
+    return`<tr>
+      <td style="font-weight:500">${m.ad}</td>
+      <td style="color:#1baf7a;font-weight:600">${fmt(m.alacak)}</td>
+      <td style="color:#e34948;font-weight:600">${fmt(m.borc)}</td>
+      <td style="font-weight:600;color:${net>=0?'#1baf7a':'#e34948'}">${net>=0?'+':''}${fmt(Math.abs(net))}</td>
+      <td style="font-size:12px;color:#52514e">${m.doviz||'—'}</td>
+      <td><button class="btn btn-red" onclick="delMusteri(${i})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+}
+function addMusteri(){
+  const a=document.getElementById('m-ad').value.trim();
+  if(!a){showToast('Müşteri adı zorunlu!',false);return;}
+  musteriler.push({ad:a,alacak:document.getElementById('m-alacak').value||0,borc:document.getElementById('m-borc').value||0,doviz:document.getElementById('m-doviz').value});
+  save();renderMusteri();closeModal('m-musteri');
+  ['m-ad','m-alacak','m-borc','m-doviz'].forEach(id=>document.getElementById(id).value='');
+  showToast('Müşteri eklendi');
+}
+function delMusteri(i){if(confirm('Müşteriyi silmek istediğine emin misin?')){musteriler.splice(i,1);save();renderMusteri();}}
+
+function renderButce(){
+  const el=document.getElementById('butce-list');
+  if(!butceler.length){el.innerHTML='<div class="empty">Henüz bütçe kalemi yok.</div>';return;}
+  const colors=['#1baf7a','#eda100','#e34948'];
+  el.innerHTML=butceler.map((b,i)=>{
+    const pct=b.hedef>0?Math.min(100,Math.round((b.harc/b.hedef)*100)):0;
+    const col=pct<70?colors[0]:pct<90?colors[1]:colors[2];
+    return`<div class="budget-item">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:600">${b.kat}</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:#52514e">${fmt(b.harc)} / ${fmt(b.hedef)}</span>
+          <span style="font-size:12px;font-weight:700;color:${col}">${pct}%</span>
+          <button class="btn btn-red" onclick="delButce(${i})" style="padding:3px 7px"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+    </div>`;
+  }).join('');
+}
+function addButce(){
+  const k=document.getElementById('b-kat').value.trim();const h=document.getElementById('b-hedef').value;
+  if(!k||!h){showToast('Kategori ve hedef tutar zorunlu!',false);return;}
+  butceler.push({kat:k,hedef:Number(h),harc:Number(document.getElementById('b-harc').value)||0});
+  save();renderButce();closeModal('m-butce');
+  ['b-kat','b-hedef','b-harc'].forEach(id=>document.getElementById(id).value='');
+  showToast('Bütçe kalemi eklendi');
+}
+function delButce(i){if(confirm('Bütçe kalemini silmek istediğine emin misin?')){butceler.splice(i,1);save();renderButce();}}
+
+function resetOCR(){
+  document.getElementById('ocr-s1').style.display='';
+  document.getElementById('ocr-s2').style.display='none';
+  document.getElementById('ocr-s3').style.display='none';
+  document.getElementById('ocr-s4').style.display='none';
+  document.getElementById('ocr-confirm-btn').style.display='none';
+  document.getElementById('ocr-close-btn').style.display='none';
+  document.getElementById('ocr-cancel-btn').style.display='';
+  document.getElementById('ocr-file').value='';
+}
+
+async function handleOCR(event){
+  const file=event.target.files[0];if(!file)return;
+  const key=getApiKey();
+  if(!key){showToast('Önce API anahtarını gir!',false);resetOCR();return;}
+  document.getElementById('ocr-s1').style.display='none';
+  document.getElementById('ocr-s2').style.display='';
+  const reader=new FileReader();
+  reader.onload=async(e)=>{
+    const b64=e.target.result.split(',')[1];
+    const mime=file.type||'image/jpeg';
+    if(mime.startsWith('image/')){
+      const wrap=document.getElementById('ocr-img-wrap');
+      wrap.style.display='';
+      wrap.innerHTML=`<img src="${e.target.result}" alt="Fatura"/>`;
+    }
+    document.getElementById('ocr-status').textContent='AI faturayı okuyuyor...';
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
+          {type:'text',text:'Bu fatura görselinden bilgileri çıkar. SADECE JSON döndür, başka hiçbir şey yazma: {"firma":"","fatura_no":"","tutar":0,"kdv_pct":20,"para_birimi":"TL","tarih":"YYYY-MM-DD"}. Para birimi TL/USD/EUR olabilir. Tarih yoksa bugünkü tarihi yaz.'}
+        ]}]})
+      });
+      if(!res.ok){const err=await res.json();throw new Error(err.error?.message||'API hatası');}
+      const data=await res.json();
+      const text=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
+      const parsed=JSON.parse(text);
+      document.getElementById('ocr-firma').value=parsed.firma||'';
+      document.getElementById('ocr-no').value=parsed.fatura_no||'';
+      document.getElementById('ocr-tutar').value=parsed.tutar||'';
+      document.getElementById('ocr-tarih').value=parsed.tarih||new Date().toISOString().slice(0,10);
+      const cs=document.getElementById('ocr-cur');
+      ['TL','USD','EUR'].forEach((c,i)=>{if(c===parsed.para_birimi)cs.selectedIndex=i;});
+      const ks=document.getElementById('ocr-kdv');
+      [0,10,20].forEach((v,i)=>{if(v===Number(parsed.kdv_pct))ks.selectedIndex=i;});
+      document.getElementById('ocr-tur').value=ocrType;
+      document.getElementById('ocr-s2').style.display='none';
+      document.getElementById('ocr-s3').style.display='';
+      document.getElementById('ocr-confirm-btn').style.display='';
+    }catch(err){
+      document.getElementById('ocr-status').textContent='Hata: '+err.message+'. Lütfen tekrar dene.';
+      showToast('OCR başarısız: '+err.message,false);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function confirmOCR(){
+  const tur=document.getElementById('ocr-tur').value;
+  const firma=document.getElementById('ocr-firma').value.trim();
+  const no=document.getElementById('ocr-no').value.trim();
+  const tutar=document.getElementById('ocr-tutar').value;
+  const cur=document.getElementById('ocr-cur').value;
+  const kdv=document.getElementById('ocr-kdv').value;
+  const tarih=document.getElementById('ocr-tarih').value;
+  if(!firma||!tutar){showToast('Firma adı ve tutar zorunlu!',false);return;}
+  if(tur==='gelir'){addGelir({musteri:firma,no,tutar,cur,kdv,tarih,durum:'Bekliyor',not:'OCR ile eklendi'});}
+  else{addGider({tedarik:firma,no,tutar,cur,kdv,tarih,kategori:'Diğer',not:'OCR ile eklendi'});}
+  document.getElementById('ocr-s3').style.display='none';
+  document.getElementById('ocr-s4').style.display='';
+  document.getElementById('ocr-success-msg').textContent=`${firma} — ${CUR_SYM[cur]}${tutar} (${tur==='gelir'?'Gelir':'Gider'} olarak kaydedildi)`;
+  document.getElementById('ocr-confirm-btn').style.display='none';
+  document.getElementById('ocr-cancel-btn').style.display='none';
+  document.getElementById('ocr-close-btn').style.display='';
+}
+
+function exportPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  doc.setFont('helvetica','bold');doc.setFontSize(18);doc.text('Nunitos Agency',14,18);
+  doc.setFont('helvetica','normal');doc.setFontSize(11);doc.text('Finans Raporu — '+new Date().toLocaleDateString('tr-TR'),14,26);
+  doc.setDrawColor(200);doc.line(14,30,196,30);
+  let y=40;
+  const tG=gelirler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  const tGi=giderler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
+  doc.setFont('helvetica','bold');doc.setFontSize(11);
+  doc.text('ÖZET',14,y);y+=8;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
+  doc.text('Toplam Gelir (TL): '+fmt(tG),14,y);y+=6;
+  doc.text('Toplam Gider (TL): '+fmt(tGi),14,y);y+=6;
+  doc.text('Net Kar/Zarar: '+fmt(tG-tGi),14,y);y+=12;
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GELİR FATURALARI',14,y);y+=8;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  if(gelirler.length){
+    gelirler.forEach(g=>{
+      if(y>270){doc.addPage();y=20;}
+      doc.text(`${g.tarih||'-'}  |  ${(g.musteri||'-').slice(0,30)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.durum}`,14,y);y+=6;
+    });
+  }else{doc.text('Kayıt yok.',14,y);y+=6;}
+  y+=6;doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GİDER FATURALARI',14,y);y+=8;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  if(giderler.length){
+    giderler.forEach(g=>{
+      if(y>270){doc.addPage();y=20;}
+      doc.text(`${g.tarih||'-'}  |  ${(g.tedarik||'-').slice(0,30)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.kategori}`,14,y);y+=6;
+    });
+  }else{doc.text('Kayıt yok.',14,y);y+=6;}
+  doc.save('nunitos-finans-raporu-'+new Date().toISOString().slice(0,10)+'.pdf');
+  showToast('PDF indirildi');
+}
+
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(m=>m.classList.remove('open'));}});
+document.querySelectorAll('.overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
+const storedKey=localStorage.getItem('nn3_apikey');
+if(storedKey&&document.getElementById('api-key-input'))document.getElementById('api-key-input').value=storedKey;
+renderOzet();
+</script>
+</body>
+</html>
