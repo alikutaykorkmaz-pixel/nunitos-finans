@@ -25,7 +25,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .section.active{display:block}
 .filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap;background:#fff;padding:10px 14px;border-radius:10px;border:1px solid #e5e5e3}
 .filter-bar select,.filter-bar input{font-size:12px;padding:6px 10px;border:1px solid #d5d5d3;border-radius:6px;background:#f5f5f3;color:#0b0b0b;outline:none}
-.filter-bar select:focus,.filter-bar input:focus{border-color:#2a78d6}
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
 .kpi{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid #e5e5e3}
 .kpi-label{font-size:11px;color:#898781;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
@@ -47,14 +46,13 @@ th{text-align:left;padding:10px 14px;color:#898781;font-weight:500;border-bottom
 td{padding:10px 14px;color:#0b0b0b;border-bottom:1px solid #f0f0ee;white-space:nowrap}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#fafafa}
-.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;gap:3px}
+.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .bdg-green{background:#e1f5ee;color:#085041}
 .bdg-amber{background:#faeeda;color:#633806}
 .bdg-red{background:#fcebeb;color:#791f1f}
 .bdg-blue{background:#e6f1fb;color:#0c447c}
 .bdg-violet{background:#eeedfe;color:#3c3489}
 .bdg-teal{background:#e1f5ee;color:#085041}
-
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:14px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
@@ -68,7 +66,6 @@ tr:hover td{background:#fafafa}
 .fg textarea{resize:vertical;min-height:64px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-foot{padding:14px 18px;border-top:1px solid #e5e5e3;display:flex;justify-content:flex-end;gap:8px;background:#fafafa}
-
 .ocr-zone{border:2px dashed #d5d5d3;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa}
 .ocr-zone:hover{border-color:#2a78d6;background:#f0f6ff}
 .ocr-zone i{font-size:36px;color:#898781;display:block;margin-bottom:10px}
@@ -78,30 +75,21 @@ tr:hover td{background:#fafafa}
 .warn-box{background:#fffbf0;border:1px solid #f0c040;border-radius:8px;padding:11px 13px;margin:10px 0;font-size:12px;color:#633806;display:flex;align-items:flex-start;gap:7px}
 .info-box{background:#f0f6ff;border:1px solid #93c5fd;border-radius:8px;padding:11px 13px;font-size:12px;color:#0c447c;display:flex;align-items:center;gap:7px}
 .success-box{background:#f0faf5;border:1px solid #6ee7b7;border-radius:8px;padding:11px 13px;font-size:12px;color:#085041;display:flex;align-items:center;gap:7px}
-
 .progress-bg{background:#f0f0ee;border-radius:4px;height:8px;overflow:hidden;margin-top:7px}
 .progress-fill{height:100%;border-radius:4px;transition:width .4s}
 .budget-item{padding:12px 0;border-bottom:1px solid #f0f0ee}
 .budget-item:last-child{border-bottom:none}
-
 .chart-wrap{position:relative;width:100%;height:220px;padding:16px 18px 18px}
-
 .toast{position:fixed;bottom:24px;right:24px;background:#0b0b0b;color:#fff;border-radius:9px;padding:11px 16px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
-
-.api-bar{background:#fffbf0;border-bottom:1px solid #f0c040;padding:8px 1.5rem;display:flex;align-items:center;gap:10px;font-size:12px;color:#633806}
-.api-bar input{flex:1;max-width:320px;padding:6px 10px;border:1px solid #f0c040;border-radius:6px;font-size:12px;background:#fff}
-.api-bar .api-status{font-size:11px;margin-left:4px}
+.api-bar{background:#f0f6ff;border-bottom:1px solid #93c5fd;padding:10px 1.5rem;display:flex;align-items:center;gap:10px;font-size:12px;color:#0c447c;flex-wrap:wrap}
+.api-bar input{flex:1;min-width:200px;max-width:360px;padding:7px 10px;border:1px solid #93c5fd;border-radius:6px;font-size:12px;background:#fff;color:#0b0b0b}
+.api-status{font-size:11px;font-weight:600}
 .api-status.ok{color:#085041}
 .api-status.err{color:#791f1f}
-
 .empty{text-align:center;padding:2.5rem;color:#898781;font-size:13px}
-
-@media(max-width:600px){
-  .frow{grid-template-columns:1fr}
-  .kpi-row{grid-template-columns:repeat(2,1fr)}
-  .top-actions .btn span{display:none}
-}
+.gemini-badge{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600}
+@media(max-width:600px){.frow{grid-template-columns:1fr}.kpi-row{grid-template-columns:repeat(2,1fr)}.top-actions .btn span{display:none}}
 </style>
 </head>
 <body>
@@ -118,17 +106,18 @@ tr:hover td{background:#fafafa}
   </div>
   <div class="top-actions">
     <button class="btn" onclick="exportPDF()"><i class="ti ti-file-download"></i> <span>PDF dışa aktar</span></button>
-    <button class="btn btn-blue" onclick="document.getElementById('api-panel').style.display=document.getElementById('api-panel').style.display==='none'?'flex':'none'"><i class="ti ti-key"></i> <span>API Anahtarı</span></button>
+    <button class="btn btn-blue" onclick="toggleApiBar()"><i class="ti ti-key"></i> <span>API Anahtarı</span></button>
   </div>
 </div>
 
 <div class="api-bar" id="api-panel" style="display:none">
-  <i class="ti ti-key"></i>
-  <span>Anthropic API Anahtarı (OCR için):</span>
-  <input type="password" id="api-key-input" placeholder="sk-ant-..." oninput="saveApiKey(this.value)"/>
+  <span class="gemini-badge">Google Gemini — Ücretsiz</span>
+  <span>API Anahtarı:</span>
+  <input type="password" id="api-key-input" placeholder="AIza..." oninput="saveApiKey(this.value)"/>
+  <button class="btn btn-blue" onclick="testApiKey()"><i class="ti ti-plug"></i> Test et</button>
   <span class="api-status" id="api-status"></span>
-  <button class="btn" onclick="testApiKey()"><i class="ti ti-plug"></i> Test et</button>
-  <button class="btn" onclick="document.getElementById('api-panel').style.display='none'">Kapat</button>
+  <button class="btn" onclick="toggleApiBar()">Kapat</button>
+  <span style="font-size:11px;color:#52514e;flex-basis:100%"><i class="ti ti-info-circle"></i> Ücretsiz anahtar almak için: <strong>aistudio.google.com</strong> → "Get API Key" → "Create API key"</span>
 </div>
 
 <div class="nav-tabs">
@@ -141,7 +130,6 @@ tr:hover td{background:#fafafa}
 
 <div class="content">
 
-<!-- ÖZET -->
 <div class="section active" id="tab-ozet">
   <div class="kpi-row" id="ozet-kpis"></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
@@ -164,7 +152,6 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<!-- GELİR -->
 <div class="section" id="tab-gelir">
   <div class="filter-bar">
     <i class="ti ti-filter" style="color:#898781"></i>
@@ -187,7 +174,6 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<!-- GİDER -->
 <div class="section" id="tab-gider">
   <div class="filter-bar">
     <i class="ti ti-filter" style="color:#898781"></i>
@@ -210,7 +196,6 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<!-- MÜŞTERİLER -->
 <div class="section" id="tab-musteri">
   <div class="filter-bar">
     <div style="flex:1"></div>
@@ -227,7 +212,6 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<!-- BÜTÇE -->
 <div class="section" id="tab-butce">
   <div class="filter-bar">
     <div style="flex:1"></div>
@@ -317,24 +301,30 @@ tr:hover td{background:#fafafa}
 <!-- MODAL: OCR -->
 <div class="overlay" id="m-ocr">
 <div class="modal" style="max-width:500px">
-  <div class="modal-hdr"><h3><i class="ti ti-scan"></i> Fatura OCR — AI ile otomatik okuma</h3><button class="btn" onclick="closeModal('m-ocr')"><i class="ti ti-x"></i></button></div>
+  <div class="modal-hdr"><h3><i class="ti ti-scan"></i> Fatura OCR — Google Gemini ile okuma</h3><button class="btn" onclick="closeModal('m-ocr')"><i class="ti ti-x"></i></button></div>
   <div class="modal-body">
+
     <div id="ocr-s1">
       <div class="ocr-zone" onclick="document.getElementById('ocr-file').click()">
         <i class="ti ti-cloud-upload"></i>
         <p>Fatura görselini seçmek için tıkla</p>
-        <p class="hint">JPG, PNG veya PDF — Max 5MB</p>
+        <p class="hint">JPG veya PNG — Max 5MB</p>
       </div>
-      <input type="file" id="ocr-file" accept="image/*,.pdf" style="display:none" onchange="handleOCR(event)"/>
+      <input type="file" id="ocr-file" accept="image/*" style="display:none" onchange="handleOCR(event)"/>
       <div class="warn-box" style="margin-top:12px">
-        <i class="ti ti-alert-triangle"></i>
-        <span>API anahtarı girmeden OCR çalışmaz. Sağ üstteki <strong>API Anahtarı</strong> butonundan anahtarını ekle.</span>
+        <i class="ti ti-key"></i>
+        <div>
+          <strong>API anahtarı gerekli.</strong> Sağ üstteki <strong>"API Anahtarı"</strong> butonuna tıkla ve ücretsiz Google Gemini anahtarını gir.<br>
+          <span style="font-size:11px;margin-top:4px;display:block">Anahtar almak için: <strong>aistudio.google.com</strong> → "Get API Key" → "Create API key"</span>
+        </div>
       </div>
     </div>
+
     <div id="ocr-s2" style="display:none">
       <div class="info-box"><i class="ti ti-loader"></i><span id="ocr-status">Fatura okunuyor, lütfen bekle...</span></div>
       <div id="ocr-img-wrap" style="margin-top:12px;border-radius:8px;overflow:hidden;border:1px solid #e5e5e3;display:none" class="ocr-preview"></div>
     </div>
+
     <div id="ocr-s3" style="display:none">
       <div class="warn-box"><i class="ti ti-alert-triangle"></i><strong>AI tarafından okunan bilgileri kontrol et!</strong> Yanlış varsa düzelt, sonra onayla.</div>
       <div class="fg"><label>Firma / Müşteri adı</label><input id="ocr-firma"/></div>
@@ -353,15 +343,17 @@ tr:hover td{background:#fafafa}
           <option value="gider">Gider — Nunitos'a tedarikçiden gelen</option>
         </select>
       </div>
-      <div class="success-box"><i class="ti ti-shield-check"></i>Bilgileri onaylamadan kayıt yapılmaz. Lütfen her alanı kontrol et.</div>
+      <div class="success-box"><i class="ti ti-shield-check"></i>Bilgileri onaylamadan kayıt yapılmaz. Her alanı kontrol et.</div>
     </div>
+
     <div id="ocr-s4" style="display:none">
       <div style="text-align:center;padding:2rem">
-        <i class="ti ti-circle-check" style="font-size:48px;color:#1baf7a;display:block;margin-bottom:12px"></i>
-        <p style="font-size:15px;font-weight:600;color:#085041">Fatura başarıyla kaydedildi!</p>
+        <i class="ti ti-circle-check" style="font-size:52px;color:#1baf7a;display:block;margin-bottom:14px"></i>
+        <p style="font-size:15px;font-weight:600;color:#085041">Fatura kaydedildi!</p>
         <p style="font-size:12px;color:#52514e;margin-top:6px" id="ocr-success-msg"></p>
       </div>
     </div>
+
   </div>
   <div class="modal-foot">
     <button class="btn" onclick="closeModal('m-ocr')" id="ocr-cancel-btn">İptal</button>
@@ -395,23 +387,32 @@ function showToast(msg,ok=true){
   t.innerHTML=`<i class="ti ti-${ok?'check':'alert-triangle'}"></i><span>${msg}</span>`;
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
 }
-
-function saveApiKey(v){localStorage.setItem('nn3_apikey',v);document.getElementById('api-status').textContent='';}
+function toggleApiBar(){
+  const p=document.getElementById('api-panel');
+  p.style.display=p.style.display==='none'?'flex':'none';
+  const stored=localStorage.getItem('nn3_gemini')||'';
+  if(stored)document.getElementById('api-key-input').value=stored;
+}
+function saveApiKey(v){localStorage.setItem('nn3_gemini',v);}
 function getApiKey(){
-  const stored=localStorage.getItem('nn3_apikey')||'';
-  const input=document.getElementById('api-key-input');
-  if(input&&!input.value&&stored)input.value=stored;
-  return stored||input?.value||'';
+  const stored=localStorage.getItem('nn3_gemini')||'';
+  const inp=document.getElementById('api-key-input');
+  if(inp&&!inp.value&&stored)inp.value=stored;
+  return stored||inp?.value||'';
 }
 async function testApiKey(){
   const key=getApiKey();
-  if(!key){document.getElementById('api-status').textContent='⚠ Anahtar girilmedi';document.getElementById('api-status').className='api-status err';return;}
-  document.getElementById('api-status').textContent='Test ediliyor...';
+  const statusEl=document.getElementById('api-status');
+  if(!key){statusEl.textContent='⚠ Anahtar girilmedi';statusEl.className='api-status err';return;}
+  statusEl.textContent='Test ediliyor...';statusEl.className='api-status';
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:10,messages:[{role:'user',content:'hi'}]})});
-    if(r.ok){document.getElementById('api-status').textContent='✓ Bağlantı başarılı';document.getElementById('api-status').className='api-status ok';}
-    else{document.getElementById('api-status').textContent='✗ Geçersiz anahtar';document.getElementById('api-status').className='api-status err';}
-  }catch(e){document.getElementById('api-status').textContent='✗ Bağlantı hatası';document.getElementById('api-status').className='api-status err';}
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:'Merhaba'}]}]})
+    });
+    if(r.ok){statusEl.textContent='✓ Bağlantı başarılı!';statusEl.className='api-status ok';}
+    else{const e=await r.json();statusEl.textContent='✗ '+(e.error?.message||'Geçersiz anahtar');statusEl.className='api-status err';}
+  }catch(e){statusEl.textContent='✗ Bağlantı hatası';statusEl.className='api-status err';}
 }
 
 function gotoTab(id){
@@ -426,12 +427,8 @@ function gotoTab(id){
   if(id==='musteri')renderMusteri();
   if(id==='butce')renderButce();
 }
-
 function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){
-  document.getElementById(id).classList.remove('open');
-  if(id==='m-ocr')resetOCR();
-}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='m-ocr')resetOCR();}
 function openOCR(type){ocrType=type;document.getElementById('ocr-tur').value=type;openModal('m-ocr');}
 
 function buildAyFilter(selId,arr){
@@ -459,16 +456,8 @@ function renderOzet(){
   `;
   const gl=gelirler.slice(-5).reverse();
   const gd=giderler.slice(-5).reverse();
-  document.getElementById('ozet-gelir-list').innerHTML=gl.length?gl.map(g=>`
-    <div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px">
-      <span style="color:#0b0b0b">${g.musteri||'-'}</span>
-      <span style="color:#1baf7a;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span>
-    </div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
-  document.getElementById('ozet-gider-list').innerHTML=gd.length?gd.map(g=>`
-    <div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px">
-      <span style="color:#0b0b0b">${g.tedarik||'-'}</span>
-      <span style="color:#e34948;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span>
-    </div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
+  document.getElementById('ozet-gelir-list').innerHTML=gl.length?gl.map(g=>`<div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px"><span>${g.musteri||'-'}</span><span style="color:#1baf7a;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span></div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
+  document.getElementById('ozet-gider-list').innerHTML=gd.length?gd.map(g=>`<div style="display:flex;justify-content:space-between;padding:9px 18px;border-bottom:1px solid #f0f0ee;font-size:12px"><span>${g.tedarik||'-'}</span><span style="color:#e34948;font-weight:600">${fmt(toplam(g.tutar,g.kdv),g.cur)}</span></div>`).join(''):'<div class="empty">Henüz veri yok.</div>';
   renderOzetChart();
 }
 
@@ -479,8 +468,7 @@ function renderOzetChart(){
   giderler.forEach(g=>{if(g.tarih&&g.tarih.slice(0,4)==yr&&g.cur==='TL'){giderD[new Date(g.tarih).getMonth()]+=toplam(g.tutar,g.kdv);}});
   if(ozetChart)ozetChart.destroy();
   ozetChart=new Chart(document.getElementById('ozet-chart').getContext('2d'),{
-    type:'bar',
-    data:{labels:MONTHS,datasets:[
+    type:'bar',data:{labels:MONTHS,datasets:[
       {label:'Gelir',data:gelirD.map(v=>Math.round(v)),backgroundColor:'#1baf7a',borderRadius:4,borderSkipped:false},
       {label:'Gider',data:giderD.map(v=>Math.round(v)),backgroundColor:'#e34948',borderRadius:4,borderSkipped:false}
     ]},
@@ -513,25 +501,14 @@ function renderGelir(){
     <div class="kpi"><div class="kpi-label">Fatura sayısı</div><div class="kpi-val">${arr.length}</div></div>
   `;
   const tbody=document.getElementById('gelir-tbody');
-  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Fatura bulunamadı. "Yeni fatura" veya "OCR ile yükle" kullan.</div></td></tr>`;return;}
+  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Fatura bulunamadı.</div></td></tr>`;return;}
   tbody.innerHTML=arr.map(g=>{
     const top=toplam(g.tutar,g.kdv);
     const dc=g.durum==='Ödendi'?'bdg-green':g.durum==='Bekliyor'?'bdg-amber':'bdg-red';
     const cc=g.cur==='TL'?'bdg-blue':g.cur==='USD'?'bdg-violet':'bdg-teal';
-    return`<tr>
-      <td style="font-weight:500">${g.musteri||'-'}</td>
-      <td style="color:#52514e">${g.no||'-'}</td>
-      <td>${fmt(g.tutar,g.cur)}</td>
-      <td><span class="bdg ${cc}">${g.cur}</span></td>
-      <td>${g.kdv}%</td>
-      <td style="font-weight:600">${fmt(top,g.cur)}</td>
-      <td>${g.tarih||'-'}</td>
-      <td><span class="bdg ${dc}">${g.durum}</span></td>
-      <td><button class="btn btn-red" onclick="delGelir(${gelirler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
-    </tr>`;
+    return`<tr><td style="font-weight:500">${g.musteri||'-'}</td><td style="color:#52514e">${g.no||'-'}</td><td>${fmt(g.tutar,g.cur)}</td><td><span class="bdg ${cc}">${g.cur}</span></td><td>${g.kdv}%</td><td style="font-weight:600">${fmt(top,g.cur)}</td><td>${g.tarih||'-'}</td><td><span class="bdg ${dc}">${g.durum}</span></td><td><button class="btn btn-red" onclick="delGelir(${gelirler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td></tr>`;
   }).join('');
 }
-
 function addGelir(data){
   const d=data||{musteri:document.getElementById('g-musteri').value.trim(),no:document.getElementById('g-no').value.trim(),tutar:document.getElementById('g-tutar').value,cur:document.getElementById('g-cur').value,kdv:document.getElementById('g-kdv').value,tarih:document.getElementById('g-tarih').value,durum:document.getElementById('g-durum').value,not:document.getElementById('g-not').value};
   if(!d.musteri||!d.tutar){showToast('Müşteri adı ve tutar zorunlu!',false);return;}
@@ -552,24 +529,13 @@ function renderGider(){
     <div class="kpi"><div class="kpi-label">Ortalama gider</div><div class="kpi-val">${arr.length?fmt(total/arr.length):fmt(0)}</div></div>
   `;
   const tbody=document.getElementById('gider-tbody');
-  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Gider bulunamadı. "Yeni gider" veya "OCR ile yükle" kullan.</div></td></tr>`;return;}
+  if(!arr.length){tbody.innerHTML=`<tr><td colspan="9"><div class="empty">Gider bulunamadı.</div></td></tr>`;return;}
   tbody.innerHTML=arr.map(g=>{
     const top=toplam(g.tutar,g.kdv);
     const cc=g.cur==='TL'?'bdg-blue':g.cur==='USD'?'bdg-violet':'bdg-teal';
-    return`<tr>
-      <td style="font-weight:500">${g.tedarik||'-'}</td>
-      <td style="color:#52514e">${g.no||'-'}</td>
-      <td>${fmt(g.tutar,g.cur)}</td>
-      <td><span class="bdg ${cc}">${g.cur}</span></td>
-      <td>${g.kdv}%</td>
-      <td style="font-weight:600">${fmt(top,g.cur)}</td>
-      <td>${g.tarih||'-'}</td>
-      <td><span class="bdg bdg-amber">${g.kategori}</span></td>
-      <td><button class="btn btn-red" onclick="delGider(${giderler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
-    </tr>`;
+    return`<tr><td style="font-weight:500">${g.tedarik||'-'}</td><td style="color:#52514e">${g.no||'-'}</td><td>${fmt(g.tutar,g.cur)}</td><td><span class="bdg ${cc}">${g.cur}</span></td><td>${g.kdv}%</td><td style="font-weight:600">${fmt(top,g.cur)}</td><td>${g.tarih||'-'}</td><td><span class="bdg bdg-amber">${g.kategori}</span></td><td><button class="btn btn-red" onclick="delGider(${giderler.indexOf(g)})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td></tr>`;
   }).join('');
 }
-
 function addGider(data){
   const d=data||{tedarik:document.getElementById('gi-tedarik').value.trim(),no:document.getElementById('gi-no').value.trim(),tutar:document.getElementById('gi-tutar').value,cur:document.getElementById('gi-cur').value,kdv:document.getElementById('gi-kdv').value,tarih:document.getElementById('gi-tarih').value,kategori:document.getElementById('gi-kat').value,not:document.getElementById('gi-not').value};
   if(!d.tedarik||!d.tutar){showToast('Tedarikçi adı ve tutar zorunlu!',false);return;}
@@ -584,14 +550,7 @@ function renderMusteri(){
   if(!musteriler.length){tbody.innerHTML=`<tr><td colspan="6"><div class="empty">Henüz müşteri eklenmedi.</div></td></tr>`;return;}
   tbody.innerHTML=musteriler.map((m,i)=>{
     const net=Number(m.alacak)-Number(m.borc);
-    return`<tr>
-      <td style="font-weight:500">${m.ad}</td>
-      <td style="color:#1baf7a;font-weight:600">${fmt(m.alacak)}</td>
-      <td style="color:#e34948;font-weight:600">${fmt(m.borc)}</td>
-      <td style="font-weight:600;color:${net>=0?'#1baf7a':'#e34948'}">${net>=0?'+':''}${fmt(Math.abs(net))}</td>
-      <td style="font-size:12px;color:#52514e">${m.doviz||'—'}</td>
-      <td><button class="btn btn-red" onclick="delMusteri(${i})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td>
-    </tr>`;
+    return`<tr><td style="font-weight:500">${m.ad}</td><td style="color:#1baf7a;font-weight:600">${fmt(m.alacak)}</td><td style="color:#e34948;font-weight:600">${fmt(m.borc)}</td><td style="font-weight:600;color:${net>=0?'#1baf7a':'#e34948'}">${net>=0?'+':''}${fmt(Math.abs(net))}</td><td style="font-size:12px;color:#52514e">${m.doviz||'—'}</td><td><button class="btn btn-red" onclick="delMusteri(${i})" style="padding:4px 8px"><i class="ti ti-trash"></i></button></td></tr>`;
   }).join('');
 }
 function addMusteri(){
@@ -611,17 +570,7 @@ function renderButce(){
   el.innerHTML=butceler.map((b,i)=>{
     const pct=b.hedef>0?Math.min(100,Math.round((b.harc/b.hedef)*100)):0;
     const col=pct<70?colors[0]:pct<90?colors[1]:colors[2];
-    return`<div class="budget-item">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:13px;font-weight:600">${b.kat}</span>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:12px;color:#52514e">${fmt(b.harc)} / ${fmt(b.hedef)}</span>
-          <span style="font-size:12px;font-weight:700;color:${col}">${pct}%</span>
-          <button class="btn btn-red" onclick="delButce(${i})" style="padding:3px 7px"><i class="ti ti-trash"></i></button>
-        </div>
-      </div>
-      <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
-    </div>`;
+    return`<div class="budget-item"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:13px;font-weight:600">${b.kat}</span><div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:#52514e">${fmt(b.harc)} / ${fmt(b.hedef)}</span><span style="font-size:12px;font-weight:700;color:${col}">${pct}%</span><button class="btn btn-red" onclick="delButce(${i})" style="padding:3px 7px"><i class="ti ti-trash"></i></button></div></div><div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
   }).join('');
 }
 function addButce(){
@@ -655,24 +604,22 @@ async function handleOCR(event){
   reader.onload=async(e)=>{
     const b64=e.target.result.split(',')[1];
     const mime=file.type||'image/jpeg';
-    if(mime.startsWith('image/')){
-      const wrap=document.getElementById('ocr-img-wrap');
-      wrap.style.display='';
-      wrap.innerHTML=`<img src="${e.target.result}" alt="Fatura"/>`;
-    }
-    document.getElementById('ocr-status').textContent='AI faturayı okuyuyor...';
+    const wrap=document.getElementById('ocr-img-wrap');
+    wrap.style.display='';
+    wrap.innerHTML=`<img src="${e.target.result}" alt="Fatura"/>`;
+    document.getElementById('ocr-status').textContent='Google Gemini faturayı okuyor...';
     try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
-        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mime,data:b64}},
-          {type:'text',text:'Bu fatura görselinden bilgileri çıkar. SADECE JSON döndür, başka hiçbir şey yazma: {"firma":"","fatura_no":"","tutar":0,"kdv_pct":20,"para_birimi":"TL","tarih":"YYYY-MM-DD"}. Para birimi TL/USD/EUR olabilir. Tarih yoksa bugünkü tarihi yaz.'}
+      const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[
+          {inline_data:{mime_type:mime,data:b64}},
+          {text:'Bu fatura görselinden bilgileri çıkar. SADECE JSON döndür, başka hiçbir şey yazma, markdown kullanma: {"firma":"","fatura_no":"","tutar":0,"kdv_pct":20,"para_birimi":"TL","tarih":"YYYY-MM-DD"}. Para birimi TL/USD/EUR olabilir. Tarih yoksa bugünkü tarihi yaz.'}
         ]}]})
       });
       if(!res.ok){const err=await res.json();throw new Error(err.error?.message||'API hatası');}
       const data=await res.json();
-      const text=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
+      let text=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+      text=text.replace(/```json|```/g,'').trim();
       const parsed=JSON.parse(text);
       document.getElementById('ocr-firma').value=parsed.firma||'';
       document.getElementById('ocr-no').value=parsed.fatura_no||'';
@@ -687,7 +634,7 @@ async function handleOCR(event){
       document.getElementById('ocr-s3').style.display='';
       document.getElementById('ocr-confirm-btn').style.display='';
     }catch(err){
-      document.getElementById('ocr-status').textContent='Hata: '+err.message+'. Lütfen tekrar dene.';
+      document.getElementById('ocr-status').textContent='Hata: '+err.message;
       showToast('OCR başarısız: '+err.message,false);
     }
   };
@@ -722,36 +669,26 @@ function exportPDF(){
   let y=40;
   const tG=gelirler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
   const tGi=giderler.filter(g=>g.cur==='TL').reduce((s,g)=>s+toplam(g.tutar,g.kdv),0);
-  doc.setFont('helvetica','bold');doc.setFontSize(11);
-  doc.text('ÖZET',14,y);y+=8;
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('OZET',14,y);y+=8;
   doc.setFont('helvetica','normal');doc.setFontSize(10);
   doc.text('Toplam Gelir (TL): '+fmt(tG),14,y);y+=6;
   doc.text('Toplam Gider (TL): '+fmt(tGi),14,y);y+=6;
   doc.text('Net Kar/Zarar: '+fmt(tG-tGi),14,y);y+=12;
-  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GELİR FATURALARI',14,y);y+=8;
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GELIR FATURALARI',14,y);y+=8;
   doc.setFont('helvetica','normal');doc.setFontSize(9);
-  if(gelirler.length){
-    gelirler.forEach(g=>{
-      if(y>270){doc.addPage();y=20;}
-      doc.text(`${g.tarih||'-'}  |  ${(g.musteri||'-').slice(0,30)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.durum}`,14,y);y+=6;
-    });
-  }else{doc.text('Kayıt yok.',14,y);y+=6;}
-  y+=6;doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GİDER FATURALARI',14,y);y+=8;
+  if(gelirler.length){gelirler.forEach(g=>{if(y>270){doc.addPage();y=20;}doc.text(`${g.tarih||'-'}  |  ${(g.musteri||'-').slice(0,28)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.durum}`,14,y);y+=6;});}
+  else{doc.text('Kayit yok.',14,y);y+=6;}
+  y+=6;doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('GIDER FATURALARI',14,y);y+=8;
   doc.setFont('helvetica','normal');doc.setFontSize(9);
-  if(giderler.length){
-    giderler.forEach(g=>{
-      if(y>270){doc.addPage();y=20;}
-      doc.text(`${g.tarih||'-'}  |  ${(g.tedarik||'-').slice(0,30)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.kategori}`,14,y);y+=6;
-    });
-  }else{doc.text('Kayıt yok.',14,y);y+=6;}
+  if(giderler.length){giderler.forEach(g=>{if(y>270){doc.addPage();y=20;}doc.text(`${g.tarih||'-'}  |  ${(g.tedarik||'-').slice(0,28)}  |  ${fmt(toplam(g.tutar,g.kdv),g.cur)}  |  ${g.kategori}`,14,y);y+=6;});}
+  else{doc.text('Kayit yok.',14,y);y+=6;}
   doc.save('nunitos-finans-raporu-'+new Date().toISOString().slice(0,10)+'.pdf');
   showToast('PDF indirildi');
 }
 
-window.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(m=>m.classList.remove('open'));}});
+window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(m=>m.classList.remove('open'));});
 document.querySelectorAll('.overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
-const storedKey=localStorage.getItem('nn3_apikey');
-if(storedKey&&document.getElementById('api-key-input'))document.getElementById('api-key-input').value=storedKey;
+const sk=localStorage.getItem('nn3_gemini');if(sk&&document.getElementById('api-key-input'))document.getElementById('api-key-input').value=sk;
 renderOzet();
 </script>
 </body>
