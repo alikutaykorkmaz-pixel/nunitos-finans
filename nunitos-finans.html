@@ -406,7 +406,7 @@ async function testApiKey(){
   if(!key){statusEl.textContent='⚠ Anahtar girilmedi';statusEl.className='api-status err';return;}
   statusEl.textContent='Test ediliyor...';statusEl.className='api-status';
   try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{parts:[{text:'Merhaba'}]}]})
     });
@@ -609,7 +609,7 @@ async function handleOCR(event){
     wrap.innerHTML=`<img src="${e.target.result}" alt="Fatura"/>`;
     document.getElementById('ocr-status').textContent='Google Gemini faturayı okuyor...';
     try{
-      const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+      const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({contents:[{parts:[
           {inline_data:{mime_type:mime,data:b64}},
